@@ -27,6 +27,9 @@ class gui(ctk.CTk):
         self.button = ctk.CTkButton(self, text='Get Weather', command=self.pass_location, font=('Arial', 14))
         self.button.pack(pady=10)
 
+        # So enter submits data in entry box
+        self.bind('<Return>', lambda event: self.pass_location())
+
     def pass_location(self):
         '''
         Wrapper function for get_weather after a reference to it is stored in the class
