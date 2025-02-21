@@ -7,6 +7,7 @@ class gui(ctk.CTk):
     def __init__(self, get_weather):
         super().__init__()
 
+        # passing reference to get_weather func
         self.get_weather = get_weather
 
         self.title('Weather')
@@ -15,19 +16,43 @@ class gui(ctk.CTk):
         ctk.set_appearance_mode('system')
         ctk.set_default_color_theme('blue')
 
-        self.label = ctk.CTkLabel(self, text='Enter location', font=('Arial', 14))
-        self.label.pack(pady=10)
+        # main frame
+        self.main_frame = ctk.CTkFrame(self)
+        self.main_frame.pack(pady=20)
+        self.main_frame.columnconfigure(0, weight=1)
+        self.main_frame.columnconfigure(1, weight=0)
+        
+        # location entry box
+        self.entry = ctk.CTkEntry(self.main_frame, font=('Arial', 14))
+        self.entry.grid(row=0, column=0 ,padx=(10,5), sticky='n')
 
-        self.entry = ctk.CTkEntry(self, font=('Arial', 14))
-        self.entry.pack(pady=5)
+        # 'Enter location' label
+        self.label = ctk.CTkLabel(self.main_frame, text='Enter location', font=('Arial', 14))
+        self.label.grid(row=1, column=0, columnspan=2, pady=10)
 
-        self.weather_label = ctk.CTkLabel(self, text='', font=('Arial', 14))
-        self.weather_label.pack(pady=10)
+        # metric checkbox
+        self.checkbox_status = ctk.BooleanVar()
+        self.checkbox = ctk.CTkCheckBox(
+                                        self.main_frame,
+                                        text='Metric',
+                                        variable=self.checkbox_status,
+                                        font=('Arial', 12),
+                                        checkbox_width=16,
+                                        checkbox_height=16,
+                                        border_width=1
+                                        )
+        self.checkbox.grid(row=0, column=1, padx=(5,0), sticky='e')
 
-        self.button = ctk.CTkButton(self, text='Get Weather', command=self.pass_location, font=('Arial', 14))
-        self.button.pack(pady=10)
+        # label that displays weather data once returned
+        self.weather_label = ctk.CTkLabel(self.main_frame, text='', font=('Arial', 14))
+        self.weather_label.grid(row=1, column=0, columnspan=2, pady=10, sticky='n')
 
-        # So enter submits data in entry box
+        # 'Get weather' button
+        self.button = ctk.CTkButton(self.main_frame, text='Get Weather', command=self.pass_location, font=('Arial', 14))
+        self.button.grid(row=2, column=0, columnspan=2, pady=10)
+        # self.button.pack(pady=10)
+
+        # allows pressing enter to submit data in entry box
         self.bind('<Return>', lambda event: self.pass_location())
 
     def pass_location(self):
