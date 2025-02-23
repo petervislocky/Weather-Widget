@@ -50,7 +50,6 @@ class gui(ctk.CTk):
         # 'Get weather' button
         self.button = ctk.CTkButton(self.main_frame, text='Get Weather', command=self.pass_location, font=('Arial', 14))
         self.button.grid(row=2, column=0, columnspan=2, pady=10)
-        # self.button.pack(pady=10)
 
         # allows pressing enter to submit data in entry box
         self.bind('<Return>', lambda event: self.pass_location())
@@ -61,11 +60,15 @@ class gui(ctk.CTk):
         '''
         gw = getWeather()
         location = self.entry.get()
+        use_metric = self.checkbox_status.get()
         if location:
             api_repsonse = self.get_weather(location)
             name, region, country, text, icon, temp_f, feelslike_f, wind_mph, temp_c, feelslike_c, wind_kph = gw.parse_weather(api_repsonse)
             if api_repsonse:
-                formatted_weather = f'Temp: {temp_f}\N{DEGREE SIGN}F\nFeels like: {feelslike_f}\N{DEGREE SIGN}F\nCondition: {text}'
+                if use_metric:
+                    formatted_weather = f'Temp: {temp_c}\N{DEGREE SIGN}C\nFeels like: {feelslike_c}\N{DEGREE SIGN}C\nCondition: {text}'
+                else:
+                    formatted_weather = f'Temp: {temp_f}\N{DEGREE SIGN}F\nFeels like: {feelslike_f}\N{DEGREE SIGN}F\nCondition: {text}'
                 self.weather_label.configure(text=formatted_weather)
             else:
                 self.weather_label.configure('Error no proper data to display')
